@@ -1,0 +1,30 @@
+r,c=map(int,input().split())
+k=int(input())
+
+mp=[[-1 for j in range(c)] for i in range(r)]
+
+for turn in range(k):
+    x,y,s,t=map(int,input().split())  # 中心列、中心欄、上下延伸、左右延伸
+    x-=1  # 中心列改成從 0 開始
+    y-=1  # 中心欄改成從 0 開始
+
+    for i in range(2*s+1):
+        row=list(map(int,input().split()))  # 讀取一列探勘值
+
+        for j in range(2*t+1):
+            nr=x-s+i  # 對應到地圖的列
+            nc=y-t+j  # 對應到地圖的欄
+
+            if 0<=nr<r and 0<=nc<c:
+                value=row[j]  # 取出探勘值
+
+                if nr==x and nc==y:  # 是中心
+                    value//=2
+
+                if nr==0 or nr==r-1:  # 在地圖最上或最下列
+                    value-=1
+
+                mp[nr][nc]=value
+
+for row in mp:
+    print(*row)
