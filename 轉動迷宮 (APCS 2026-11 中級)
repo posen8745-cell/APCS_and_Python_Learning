@@ -1,0 +1,43 @@
+r,c=map(int,input().split())  # 讀取地圖列數、欄數
+grid=[input() for i in range(r)]  # 讀取地圖，每一列存成字串
+operate=input()  # 讀取操作字串
+
+for i in range(r):  # 掃描地圖每一列
+    for j in range(c):  # 掃描地圖每一欄
+        if grid[i][j]=='S':  # 找到起點
+            x=i  # 記錄彈珠目前的列座標
+            y=j  # 記錄彈珠目前的欄座標
+
+dr=[1,0,-1,0]  # 下、右、上、左的列變化
+dc=[0,1,0,-1]  # 下、右、上、左的欄變化
+direction=0  # 初始重力朝下
+answer=-1  # 尚未到達終點
+
+for step in range(len(operate)+1):  # 第 0 步，加上每次操作後的一步
+    if step>0:  # 第 0 步不用轉向，之後才依操作轉向
+        if operate[step-1]=='A':  # 這一步之前的操作是 A
+            direction=(direction+1)%4  # 切換到下一個方向
+        else:  # 這一步之前的操作是 C
+            direction=(direction-1)%4  # 切換到上一個方向
+
+    while True:  # 沿目前重力方向持續滾動
+        nr=x+dr[direction]  # 計算下一格的列座標
+        nc=y+dc[direction]  # 計算下一格的欄座標
+
+        if not (0<=nr<r and 0<=nc<c):  # 下一格超出地圖
+            break  # 結束這一步的滾動
+
+        if grid[nr][nc]=='#':  # 下一格是牆壁
+            break  # 結束這一步的滾動
+
+        x=nr  # 彈珠移動到下一格的列
+        y=nc  # 彈珠移動到下一格的欄
+
+        if grid[x][y]=='E':  # 每移動一格都檢查是否進入終點
+            answer=step  # 記錄第一次到達終點的步數
+            break  # 結束滾動
+
+    if answer!=-1:  # 如果已經到達終點
+        break  # 不再執行後面的操作
+
+print(answer)  # 輸出到達步數，沒到達則輸出 -1
