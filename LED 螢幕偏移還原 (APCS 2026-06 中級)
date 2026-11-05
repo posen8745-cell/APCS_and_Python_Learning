@@ -1,0 +1,38 @@
+r,c=map(int,input().split())  # 讀取列數、欄數
+
+a=[input() for i in range(r)]  # 讀取正常畫面
+b=[input() for i in range(r)]  # 讀取偏移畫面
+
+best_x=-1  # 記錄最佳的向右移動次數，-1 表示還沒找到
+best_y=-1  # 記錄最佳的向下移動次數
+
+for x in range(c):  # 嘗試向右移動 x 次
+    for y in range(r):  # 嘗試向下移動 y 次
+        ok=True  # 先假設這組移動次數可以還原
+
+        for i in range(r):  # 逐列檢查偏移畫面
+            for j in range(c):  # 逐欄檢查偏移畫面
+                nr=(i+y)%r  # 向下移動後的列座標
+                nc=(j+x)%c  # 向右移動後的欄座標
+
+                if b[i][j]!=a[nr][nc]:  # 移動後與正常畫面不同
+                    ok=False  # 這組移動次數無法還原
+                    break  # 不用繼續檢查這一列
+
+            if ok==False:  # 已經發現不同的格子
+                break  # 不用繼續檢查其他列
+
+        if ok:  # 所有格子都相同，這是一組可行答案
+            if best_x==-1:  # 如果是第一組可行答案
+                best_x=x  # 記錄向右次數
+                best_y=y  # 記錄向下次數
+
+            elif x+y<best_x+best_y:  # 總移動次數比較少
+                best_x=x  # 更新向右次數
+                best_y=y  # 更新向下次數
+
+            elif x+y==best_x+best_y and y<best_y:  # 總次數相同，但向下次數較少
+                best_x=x  # 更新向右次數
+                best_y=y  # 更新向下次數
+
+print(best_x,best_y)  # 先輸出向右次數，再輸出向下次數
