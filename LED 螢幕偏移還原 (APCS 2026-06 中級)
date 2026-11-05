@@ -1,38 +1,41 @@
-r,c=map(int,input().split())  # 讀取列數、欄數
+r,c,k=map(int,input().split())  # 讀取列數、欄數、單字數
 
-a=[input() for i in range(r)]  # 讀取正常畫面
-b=[input() for i in range(r)]  # 讀取偏移畫面
+grid=[['*' for j in range(c)] for i in range(r)]  # 儲存真正的字母，供檢查衝突
+show=[['*' for j in range(c)] for i in range(r)]  # 儲存最後要輸出的畫面
 
-best_x=-1  # 記錄最佳的向右移動次數，-1 表示還沒找到
-best_y=-1  # 記錄最佳的向下移動次數
+for i in range(k):  # 依序處理 k 個單字
+    x,y,d,word=input().split()  # 讀取起點列、起點欄、方向、單字
+    x=int(x)-1  # 列座標改成從 0 開始
+    y=int(y)-1  # 欄座標改成從 0 開始
+    d=int(d)  # 方向轉成整數：0 向右，1 向下
 
-for x in range(c):  # 嘗試向右移動 x 次
-    for y in range(r):  # 嘗試向下移動 y 次
-        ok=True  # 先假設這組移動次數可以還原
+    ok=True  # 先假設這個單字可以放
 
-        for i in range(r):  # 逐列檢查偏移畫面
-            for j in range(c):  # 逐欄檢查偏移畫面
-                nr=(i+y)%r  # 向下移動後的列座標
-                nc=(j+x)%c  # 向右移動後的欄座標
+    # 第一輪：只檢查，不修改盤面
+    for j in range(len(word)):  # j 是字母在單字中的位置，從 0 開始
+        nr=x+d*j  # 計算這個字母的列座標
+        nc=y+(1-d)*j  # 計算這個字母的欄座標
 
-                if b[i][j]!=a[nr][nc]:  # 移動後與正常畫面不同
-                    ok=False  # 這組移動次數無法還原
-                    break  # 不用繼續檢查這一列
+        if not (0<=nr<r and 0<=nc<c):  # 如果超出盤面
+            ok=False  # 整個單字不能放
+            break  # 停止檢查這個單字
 
-            if ok==False:  # 已經發現不同的格子
-                break  # 不用繼續檢查其他列
+        if grid[nr][nc]!='*' and grid[nr][nc]!=word[j]:  # 已有字母，而且與新字母不同
+            ok=False  # 整個單字不能放
+            break  # 停止檢查這個單字
 
-        if ok:  # 所有格子都相同，這是一組可行答案
-            if best_x==-1:  # 如果是第一組可行答案
-                best_x=x  # 記錄向右次數
-                best_y=y  # 記錄向下次數
+    # 第二輪：全部檢查通過，才真正放入
+    if ok:
+        for j in range(len(word)):  # 再走訪單字的每個字母
+            nr=x+d*j  # 計算列座標
+            nc=y+(1-d)*j  # 計算欄座標
 
-            elif x+y<best_x+best_y:  # 總移動次數比較少
-                best_x=x  # 更新向右次數
-                best_y=y  # 更新向下次數
+            grid[nr][nc]=word[j]  # 保存真正的字母
 
-            elif x+y==best_x+best_y and y<best_y:  # 總次數相同，但向下次數較少
-                best_x=x  # 更新向右次數
-                best_y=y  # 更新向下次數
+            if j==0 or j==len(word)-1:  # 如果是第一個或最後一個字母
+                show[nr][nc]=word[j]  # 輸出畫面顯示字母
+            elif show[nr][nc]=='*':  # 如果是中間字母，而且這格還是空的
+                show[nr][nc]='_'  # 輸出畫面改成底線
 
-print(best_x,best_y)  # 先輸出向右次數，再輸出向下次數
+for row in show:  # 依序取出輸出畫面的每一列
+    print(''.join(row))  # 將這列字元接起來輸出，不加空白
