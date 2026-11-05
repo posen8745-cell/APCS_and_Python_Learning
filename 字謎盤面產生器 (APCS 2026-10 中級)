@@ -1,0 +1,57 @@
+r,c,k=map(int,input().split())  # 讀取盤面列數、欄數、單字數量
+
+grid=[['*' for j in range(c)] for i in range(r)]  # 儲存真正的字母，初始都是空格
+mark=[[False for j in range(c)] for i in range(r)]  # 記錄每格是否曾是單字的首尾
+
+for i in range(k):  # 依照輸入順序處理每個單字
+    data=input().split()  # 讀取起點列、起點欄、方向、單字
+
+    x=int(data[0])-1  # 起點列轉成從 0 開始
+    y=int(data[1])-1  # 起點欄轉成從 0 開始
+    direction=int(data[2])  # 0 代表向右，1 代表向下
+    word=data[3]  # 取得要放入的單字
+
+    ok=True  # 先假設整個單字可以放
+
+    for j in range(len(word)):  # 第一輪：檢查每個字母
+        if direction==0:  # 如果是向右放
+            nr=x  # 列座標不變
+            nc=y+j  # 欄座標隨字母位置增加
+        else:  # 如果是向下放
+            nr=x+j  # 列座標隨字母位置增加
+            nc=y  # 欄座標不變
+
+        if not (0<=nr<r and 0<=nc<c):  # 如果字母超出盤面
+            ok=False  # 整個單字不能放
+            break  # 結束檢查
+
+        if grid[nr][nc]!='*' and grid[nr][nc]!=word[j]:  # 已有字母且與新字母不同
+            ok=False  # 整個單字不能放
+            break  # 結束檢查
+
+    if ok:  # 全部字母都合法，才真正放入
+        for j in range(len(word)):  # 第二輪：逐一放入字母
+            if direction==0:  # 如果是向右放
+                nr=x  # 列座標不變
+                nc=y+j  # 計算欄座標
+            else:  # 如果是向下放
+                nr=x+j  # 計算列座標
+                nc=y  # 欄座標不變
+
+            grid[nr][nc]=word[j]  # 儲存這格真正的字母
+
+            if j==0 or j==len(word)-1:  # 如果是第一個或最後一個字母
+                mark[nr][nc]=True  # 標記這格最後要顯示字母
+
+for i in range(r):  # 逐列產生輸出
+    row=''  # 這一列的輸出字串，起初是空字串
+
+    for j in range(c):  # 逐欄決定顯示內容
+        if grid[i][j]=='*':  # 如果沒有放過字母
+            row+='*'  # 顯示星號
+        elif mark[i][j]:  # 如果曾是成功放入單字的首尾
+            row+=grid[i][j]  # 顯示真正的字母
+        else:  # 有字母，但只當過中間字母
+            row+='_'  # 顯示底線
+
+    print(row)  # 輸出這一列，不加空白
