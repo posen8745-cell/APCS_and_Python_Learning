@@ -1,0 +1,27 @@
+r,c=map(int,input().split())  # 讀取地圖的列數 r、欄數 c
+k=int(input())  # 讀取探勘次數 k
+
+mp=[[-1 for j in range(c)] for u in range(r)]  # 建立 r 列 c 欄的答案地圖，尚未探勘的格子設為 -1
+
+for i in range(k):  # 依序處理 k 次探勘
+    operate=list(map(int,input().split()))  # 讀取中心列、中心欄、上下延伸量、左右延伸量
+    grid=[list(map(int,input().split())) for j in range(2*operate[2]+1)]  # 讀取這次探勘的所有資料，共 2s+1 列
+
+    for j in range(2*operate[2]+1):  # 逐列走訪探勘資料，j 從 0 開始
+        for u in range(2*operate[3]+1):  # 逐欄走訪探勘資料，u 從 0 開始
+            nr=operate[0]-1-operate[2]+j  # 中心列轉成從 0 編號，減去上方延伸量，再加 j，得到地圖列座標
+            nc=operate[1]-1-operate[3]+u  # 中心欄轉成從 0 編號，減去左方延伸量，再加 u，得到地圖欄座標
+
+            if 0<=nr<r and 0<=nc<c:  # 只有座標在地圖內的格子才需要還原
+                value=grid[j][u]  # 取出目前格子的探勘值
+
+                if j==operate[2] and u==operate[3]:  # 探勘資料中的中心位置是「上下延伸量、左右延伸量」
+                    value//=2  # 中心格子的探勘值先整除以 2，還原加倍前的數值
+
+                if nr==0 or nr==r-1:  # 判斷是否位於整張地圖的第一列或最後一列
+                    value-=1  # 這些格子的數值曾加 1，因此減 1 還原
+
+                mp[nr][nc]=value  # 將還原後的寶藏價值填入答案地圖
+
+for row in mp:  # 依序取出答案地圖的每一列，row 是一個串列
+    print(*row)  # 將這一列的數字用空白分隔輸出，不顯示串列的中括號與逗號
