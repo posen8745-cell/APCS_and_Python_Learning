@@ -1,0 +1,42 @@
+n,k=map(int,input().split())  # n 位選手，比賽 k 天
+a,b,c,d,e,f=map(int,input().split())  # 三項運動分數、最高加分、最低扣分、進步加分
+
+score=[]  # 儲存每位選手每天的原始日積分
+
+for i in range(n):  # 依序讀取每位選手的資料
+    data=list(map(int,input().split()))  # 這位選手 k 天的運動分鐘數
+    person=[]  # 儲存這位選手每天的日積分
+
+    for day in range(k):  # 依序計算每一天
+        walk=data[3*day]//10*a  # 步行每滿 10 分鐘得 a 分
+        run=data[3*day+1]//10*b  # 跑步每滿 10 分鐘得 b 分
+        bike=data[3*day+2]//10*c  # 自行車每滿 10 分鐘得 c 分
+
+        person.append(walk+run+bike)  # 加入這一天的日積分
+
+    score.append(person)  # 保存這位選手的所有日積分
+
+total=[0 for i in range(n)]  # 每位選手的總積分初始為 0
+
+for day in range(k):  # 每天分別計算加扣分
+    today=[score[i][day] for i in range(n)]  # 取出所有選手今天的日積分
+    highest=max(today)  # 今天最高的日積分
+    lowest=min(today)  # 今天最低的日積分
+
+    for i in range(n):  # 依序處理每位選手
+        total[i]+=score[i][day]  # 加上今天的日積分
+
+        if score[i][day]==highest:  # 如果今天日積分最高
+            total[i]+=d  # 加 d 分
+
+        if score[i][day]==lowest:  # 如果今天日積分最低
+            total[i]-=e  # 扣 e 分
+
+        if day>0:  # 第二天開始才有前一天可比較
+            if score[i][day]>score[i][day-1]:  # 今天日積分比昨天高
+                total[i]+=f  # 加 f 分
+
+best=max(total)  # 找出最高總積分
+winner=total.index(best)+1  # 找到冠軍的位置，加 1 轉成選手編號
+
+print(winner,best)  # 輸出冠軍編號與總積分
