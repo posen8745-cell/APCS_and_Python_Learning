@@ -1,0 +1,19 @@
+r,c,m=map(int,input().split())
+a=[list(map(int,input().split())) for i in range(r)]
+operate=list(map(int,input().split()))
+for i in range(m-1,-1,-1):
+    if operate[i]==0:
+        h=[]
+        for j in range(c):
+            g=[]
+            for u in range(r):
+                g.append(a[u][j])
+            h.append(g)
+        h.reverse()
+        a=h
+        r,c=c,r
+    if operate[i]==1:
+        a.reverse()
+print(r,c)
+for i in a:
+    print(*i)
