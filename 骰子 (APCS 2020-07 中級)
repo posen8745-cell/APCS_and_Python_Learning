@@ -1,0 +1,17 @@
+n,m=map(int,input().split())
+dice=[[1,6,5,2,4,3] for i in range(n)]
+operate=[list(map(int,input().split())) for i in range(m)]
+for i in operate:
+    a,b,c,d,e,f=dice[i[0]-1]
+    if i[1]==-1:
+        dice[i[0]-1]=f,e,c,d,a,b
+    elif i[1]==-2:
+        dice[i[0]-1]=c,d,b,a,e,f
+    else:
+        dice[i[0]-1],dice[i[1]-1]=dice[i[1]-1],dice[i[0]-1]
+for i in range(n):
+    if i==n-1:
+        print(dice[i][0])
+    else:
+        print(dice[i][0],end=' ')
+    
