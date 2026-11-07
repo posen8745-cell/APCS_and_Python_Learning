@@ -1,0 +1,32 @@
+r,c,k,m=map(int,input().split())
+city=[list(map(int,input().split())) for i in range(r)]
+for i in range(m):
+    c2=[c2[:] for c2 in city]
+    for u in range(r):
+        for v in range(c):
+            if city[u][v]!=-1:
+                q=city[u][v]//k
+                up=u-1
+                down=u+1
+                left=v-1
+                right=v+1
+                if up>=0 and c2[up][v]!=-1:
+                    c2[up][v]+=q
+                    c2[u][v]-=q
+                if down<r and c2[down][v]!=-1:
+                    c2[down][v]+=q
+                    c2[u][v]-=q
+                if left>=0 and c2[u][left]!=-1:
+                    c2[u][left]+=q
+                    c2[u][v]-=q
+                if right<c and c2[u][right]!=-1:
+                    c2[u][right]+=q
+                    c2[u][v]-=q
+    city=c2
+d=[]
+for i in range(r):
+    for j in range(c):
+        if city[i][j]!=-1:
+            d.append(city[i][j])
+print(min(d))
+print(max(d))
