@@ -1,0 +1,25 @@
+m,n,k=map(int,input().split())
+s=[input() for i in range(m)]
+start=[m-1,0]
+h=''
+operate=list(map(int,input().split()))
+for i in operate:
+    if i==0 and start[0]-1>=0:
+        start[0]-=1
+    if i==1 and start[1]+1<n:
+        start[1]+=1
+    if i==2 and start[0]+1<m and start[1]+1<n:
+        start[0],start[1]=start[0]+1,start[1]+1
+    if i==3 and start[0]+1<m:
+        start[0]+=1
+    if i==4 and start[1]-1>=0:
+        start[1]-=1
+    if i==5 and start[0]-1>=0 and start[1]-1>=0:
+        start[0]-=1;start[1]-=1
+    h+=f'{s[start[0]][start[1]]}'
+print(h)
+g=[]
+for i in h:
+    if i not in g:
+        g.append(i)
+print(len(g))
