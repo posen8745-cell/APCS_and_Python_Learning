@@ -1,0 +1,24 @@
+m,n=map(int,input().split())
+shop=[list(map(int,input().split())) for i in range(m)]
+account=list(map(int,input().split()))
+result=[]
+cash=0
+for i in range(n):
+    for j in range(m):
+        if shop[j][i]!=-1:
+            shop[j][i]=shop[j][i]*(100-account[j])//100
+    mnsh=[]
+    mn=[]
+    for j in range(m):
+        if shop[j][i]!=-1:
+            mnsh.append([j+1,shop[j][i]])
+            mn.append(shop[j][i])
+    lowest=min(mn)
+    for j in range(len(mn)):
+        if mnsh[j][1]==lowest:
+            result.append(mnsh[j][0])
+            cash+=mnsh[j][1]
+            break
+print(*result)
+print(cash)
+    
