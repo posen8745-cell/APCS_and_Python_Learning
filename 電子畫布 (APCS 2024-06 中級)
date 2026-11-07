@@ -1,0 +1,15 @@
+h,w,n=map(int,input().split())
+f=[list(map(int,input().split())) for i in range(n)]
+canva=[[0 for i in range(w)] for j in range(h)]
+for k in f:
+    r=k[0]
+    c=k[1]
+    t=k[2]
+    x=k[3]
+    for i in range(h):
+        for j in range(w):
+            if abs(i-r)+abs(j-c)<=t:
+                canva[i][j]+=x
+for i in canva:
+    print(*i)
+        
