@@ -1,0 +1,39 @@
+
+r, c = map(int, input().split())
+grid = [list(map(int, input().split())) for _ in range(r)]
+
+dirs = [(0, 1), (1, 0), (1, 1), (1, -1)]
+
+best_score = -1
+best_r = 0
+best_c = 0
+
+for i in range(r):
+    for j in range(c):
+        if grid[i][j] != 0:
+            continue
+
+        for color in (1, 2):
+            score = 0
+
+            for dr, dc in dirs:
+                length = 1
+
+                for sign in (-1, 1):
+                    nr = i + dr * sign
+                    nc = j + dc * sign
+
+                    while 0 <= nr < r and 0 <= nc < c and grid[nr][nc] == color:
+                        length += 1
+                        nr += dr * sign
+                        nc += dc * sign
+
+                if length >= 3:
+                    score += length * length
+
+            if score > best_score:
+                best_score = score
+                best_r = i + 1
+                best_c = j + 1
+
+print(best_r, best_c, best_score)
