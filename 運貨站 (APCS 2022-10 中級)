@@ -1,0 +1,38 @@
+n, m, k = map(int, input().split())
+grid = [[0] * m for i in range(n)]
+shapes = {
+    'A': [(0,0), (1,0), (2,0), (3,0)],
+    'B': [(0,0), (0,1), (0,2)],
+    'C': [(0,0), (0,1), (1,0), (1,1)],
+    'D': [(0,2), (1,0), (1,1), (1,2)],
+    'E': [(0,1), (1,0), (1,1), (2,0), (2,1)]
+}
+discard = 0
+for _ in range(k):
+    t, r = input().split()
+    r = int(r)
+    shape = shapes[t]
+    width = max(y for x, y in shape) + 1
+    c = m - width
+    def check(c):
+        for x, y in shape:
+            nr = r + x
+            nc = c + y
+            if nc < 0 or nc >= m:
+                return False
+            if grid[nr][nc] == 1:
+                return False
+        return True
+    if not check(c):
+        discard += 1
+        continue
+    while check(c - 1):
+        c -= 1
+    for x, y in shape:
+        grid[r+x][c+y] = 1
+empty = 0
+for i in range(n):
+    for j in range(m):
+        if grid[i][j] == 0:
+            empty += 1
+print(empty, discard)
