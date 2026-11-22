@@ -1,0 +1,37 @@
+r, c = map(int, input().split())
+grid = [list(map(int, input().split())) for i in range(r)]
+pos = {}
+for i in range(r):
+    for j in range(c):
+        x = grid[i][j]
+        if x not in pos:
+            pos[x] = []
+        pos[x].append((i, j))
+answer = 0
+while True:
+    changed = False
+    for x in pos:
+        (r1, c1), (r2, c2) = pos[x]
+        if grid[r1][c1] == -1:
+            continue
+        can = True
+        if r1 == r2:
+            for j in range(min(c1, c2) + 1, max(c1, c2)):
+                if grid[r1][j] != -1:
+                    can = False
+                    break
+        elif c1 == c2:
+            for i in range(min(r1, r2) + 1, max(r1, r2)):
+                if grid[i][c1] != -1:
+                    can = False
+                    break
+        else:
+            can = False
+        if can:
+            grid[r1][c1] = -1
+            grid[r2][c2] = -1
+            answer += x
+            changed = True
+    if not changed:
+        break
+print(answer)
